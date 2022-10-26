@@ -1,8 +1,17 @@
 import csv
 
 
-def find_diff(time1, time2):
-
+##################################################################
+# FUNCTION: find_inter_arrival_time(time1, time2)
+# Finds the difference between time2 and time1 (inter-arrival time)
+#   PARAMS:
+#       time1 - the previous time listed in csv file
+#       time2 - the current time listed in the csv file
+#   RETURNS:
+#      delta_t - difference in seconds of time2 and time1
+#
+##################################################################
+def find_inter_arrival_time(time1, time2):
     # get the string time of event 1 and event 2
     # remove the colon from the time
     time1 = str(time1)
@@ -31,8 +40,11 @@ def find_diff(time1, time2):
 
     return delta_t
 
-def parse_csv_file(num):
-    if num == 0:
+
+def parse_csv_file(event_or_object):
+
+    # the file to be parsed is an event
+    if event_or_object == 0:
         with open("Event_Arrival.csv", "r") as f:
             csv_reader = csv.DictReader(f, fieldnames=["Event", "Time"])
             events = list(csv_reader)
@@ -40,11 +52,11 @@ def parse_csv_file(num):
             for i in range(len(events)):
                 if i == 0:
                     continue
-                diff = find_diff(events[i - 1].get("Event"), events[i].get("Event"))
+                diff = find_inter_arrival_time(events[i - 1].get("Event"), events[i].get("Event"))
                 events[i]["Time"] = diff
         return events
 
-    elif num == 1:
+    elif event_or_object == 1:
         with open("Length_of_Rivers.csv", "r") as f:
             csv_reader = csv.DictReader(f, fieldnames=["Object", "Length"])
             objects = list(csv_reader)
@@ -52,9 +64,3 @@ def parse_csv_file(num):
                 for keys in obj:
                     obj[keys] = int(obj[keys])
         return objects
-
-
-
-
-
-
