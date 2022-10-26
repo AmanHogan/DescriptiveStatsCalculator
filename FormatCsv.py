@@ -1,33 +1,35 @@
 import csv
 
-debug = 1
 
-def find_diff(event1, event2):
-    event1 = str(event1)
-    event2 = str(event2)
+def find_diff(time1, time2):
 
-    parsed_event_1 = event1.split(":")
-    parsed_event_2 = event2.split(":")
+    # get the string time of event 1 and event 2
+    # remove the colon from the time
+    time1 = str(time1)
+    time2 = str(time2)
+    time1_str = time1.split(":")
+    time2_str = time2.split(":")
 
-    h1 = int(parsed_event_1[0])
-    m1 = int(parsed_event_1[1])
-    s1 = int(parsed_event_1[2])
+    # turn the HH : MM : SS into integers
+    h1 = int(time1_str[0])
+    h2 = int(time2_str[0])
+    m1 = int(time1_str[1])
+    m2 = int(time2_str[1])
+    s1 = int(time1_str[2])
+    s2 = int(time2_str[2])
 
-    h2 = int(parsed_event_2[0])
-    m2 = int(parsed_event_2[1])
-    s2 = int(parsed_event_2[2])
-
+    # convert HH and MM into seconds
     h1 = h1 * 60 * 60
     h2 = h2 * 60 * 60
-
     m1 = m1 * 60
     m2 = m2 * 60
 
-    total_seconds_e1 = h1 + m1 + s1
-    total_seconds_e2 = h2 + m2 + s2
-    total_difference = total_seconds_e2 - total_seconds_e1
+    # return the difference between time1 and time2
+    t1_total = h1 + m1 + s1
+    t2_total = h2 + m2 + s2
+    delta_t = t2_total - t1_total
 
-    return total_difference
+    return delta_t
 
 def parse_csv_file(num):
     if num == 0:
