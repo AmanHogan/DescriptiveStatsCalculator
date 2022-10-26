@@ -41,26 +41,47 @@ def find_inter_arrival_time(time1, time2):
     return delta_t
 
 
-def parse_csv_file(event_or_object):
-
+#########################################################################
+# FUNCTION: parse_csv_file(event_or_object, filename)
+# Converts csv data into a list and returns this list
+#   PARAMS:
+#       event_or_object - 0 or 1 whether csv has events or object | value
+#       filename - name of file to be parsed
+#   RETURNS:
+#      list_of_events | list_of_objects - list of the data in csv
+#
+#########################################################################
+def parse_csv_file(event_or_object, filename):
     # the file to be parsed is an event
     if event_or_object == 0:
-        with open("Event_Arrival.csv", "r") as f:
-            csv_reader = csv.DictReader(f, fieldnames=["Event", "Time"])
-            events = list(csv_reader)
 
-            for i in range(len(events)):
+        # Parse the csv file
+        with open(filename, "r") as f:
+            csv_reader = csv.DictReader(f, fieldnames=["Event", "Time"])
+            list_of_events = list(csv_reader)
+
+            # for each row, calculate the inter-arrival time and
+            # input it into a new column called Time
+            for i in range(len(list_of_events)):
                 if i == 0:
                     continue
-                diff = find_inter_arrival_time(events[i - 1].get("Event"), events[i].get("Event"))
-                events[i]["Time"] = diff
-        return events
 
+                diff = find_inter_arrival_time(list_of_events[i - 1].get("Event"), list_of_events[i].get("Event"))
+                list_of_events[i]["Time"] = diff
+
+        return list_of_events
+
+    # the file to be parsed is an object | value
     elif event_or_object == 1:
-        with open("Length_of_Rivers.csv", "r") as f:
+
+        # Parse the csv file
+        with open(filename, "r") as f:
             csv_reader = csv.DictReader(f, fieldnames=["Object", "Length"])
-            objects = list(csv_reader)
-            for obj in objects:
+            list_of_objects = list(csv_reader)
+
+            # convert each key value into an integer
+            for obj in list_of_objects:
                 for keys in obj:
                     obj[keys] = int(obj[keys])
-        return objects
+
+        return list_of_objects
