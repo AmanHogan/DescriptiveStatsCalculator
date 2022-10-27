@@ -13,9 +13,9 @@ import pandas as pd
 class DescriptiveStats:
     ind = 0
 
-    def __init__(self, data_list, num):
+    def __init__(self, data_list, event_or_object):
 
-        self.num = num
+        self.event_or_object = event_or_object
         self.data = pd.DataFrame(data_list)
 
         # get the names of the columns of data
@@ -28,7 +28,6 @@ class DescriptiveStats:
         self.mean = self.data.mean(numeric_only=True)
         self.median = self.data.median(numeric_only=True)
         self.deviation = self.data.std(numeric_only=True)
-        self.q1 = self.data.shape[0]
         self.q1 = self.data[str(self.column_2)].quantile(0.25)
         self.q2 = self.data[str(self.column_2)].quantile(0.50)
         self.q3 = self.data[str(self.column_2)].quantile(0.75)
@@ -47,41 +46,42 @@ class DescriptiveStats:
     #   None
     #
     ##############################################
-    def create_graphs(self, df, num):
-        ind = 0
+    def create_graphs(self, df, num, graph_name):
 
         # if event times are being graphed
         if num == 0:
-            bxplt = df.boxplot(column=[self.column_2], return_type="axes", figsize=(6, 6))
-            bxplt.set_ylabel("Inter-arrival time (t) [seconds]")
-            bxplt.set_xlabel("Data Set")
-            bxplt.set_title("Boxplot of Inter-arrival times at Dallas Love Field")
-            plt.gcf().savefig("event" + str(ind) + ".png", format="png")
 
-            ind = ind + 1
-            hst = df.plot.hist(column=[self.column_2], figsize=(5, 5),
-                               title="Histogram of inter-arrival times at Dallas Love Field", bins=10)
-            hst.set_xlabel("Inter-arrival time (t) [seconds]")
-            hst.set_ylabel("Frequency (f) [#]")
-            plt.gcf().savefig("event" + str(ind) + ".png", format="png")
+            boxplot_name = "Boxplot of Inter-arrival times of " + graph_name
+            event_boxplot = df.boxplot(column=[self.column_2], return_type="axes", figsize=(6, 6))
+            event_boxplot.set_ylabel("Inter-arrival time (t) [seconds]")
+            event_boxplot.set_xlabel("Data Set")
+            event_boxplot.set_title(boxplot_name)
+            plt.gcf().savefig("events" + "_boxplot" + ".png", format="png")
+
+            histogram_name = "Histogram of inter-arrival times of" + graph_name
+            event_histogram = df.plot.hist(column=[self.column_2], figsize=(5, 5), title=histogram_name, bins=10)
+            event_histogram.set_xlabel("Inter-arrival time (t) [seconds]")
+            event_histogram.set_ylabel("Frequency (f) [#]")
+            plt.gcf().savefig("events" + "_histogram" + ".png", format="png")
 
             plt.show()
             plt.close()
 
         # if a continuous random sample is being graphed
         else:
-            bxplt = df.boxplot(column=[self.column_2], return_type="axes", figsize=(6, 6))
-            bxplt.set_ylabel("Length of Major US Rivers (m) [Miles]")
-            bxplt.set_xlabel("Data Set")
-            bxplt.set_title("Boxplot of Major US Rivers in Miles")
-            plt.gcf().savefig("object" + str(ind) + ".png", format="png")
 
-            ind = ind + 1
-            hst = df.plot.hist(column=[self.column_2], figsize=(5, 5),
-                               title="Histogram of Major US Rivers", bins=10)
-            hst.set_xlabel("Length of Major US Rivers (m) [Miles]")
-            hst.set_ylabel("Frequency (f) [#]")
-            plt.gcf().savefig("object" + str(ind) + ".png", format="png")
+            boxplot_name = "Boxplot of " + graph_name
+            event_boxplot = df.boxplot(column=[self.column_2], return_type="axes", figsize=(6, 6))
+            event_boxplot.set_ylabel("Length of Major US Rivers (m) [Miles]")
+            event_boxplot.set_xlabel("Data Set")
+            event_boxplot.set_title(boxplot_name)
+            plt.gcf().savefig("objects" + "_boxplot" + ".png", format="png")
+
+            histogram_name = "Histogram of " + graph_name
+            event_histogram = df.plot.hist(column=[self.column_2], figsize=(5, 5), title=histogram_name, bins=10)
+            event_histogram.set_xlabel("Length of Major US Rivers (m) [Miles]")
+            event_histogram.set_ylabel("Frequency (f) [#]")
+            plt.gcf().savefig("objects" + "_histogram" + ".png", format="png")
 
             plt.show()
             plt.close()
